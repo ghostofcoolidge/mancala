@@ -3,7 +3,7 @@
 
 struct Board {
     int playerOneWins = 0;
-    int PlayerOnePositions[6] = {1,0,0,0,0,0};
+    int PlayerOnePositions[6] = {4,4,4,4,4,4};
     int PlayerOneScore = 0;
     int playerTwoWins = 0;
     int PlayerTwoPositions[6] = {4,4,4,4,4,4};
@@ -64,7 +64,6 @@ Board PlayerTurn(Board Game)
     PrintBoard(Game);
     int Move;
     int stones;
-    std::cout << Game.PlayerTurn << "\n\n";
     if (Game.PlayerTurn == true)
     {
         std::cout << "Player 1: Which position would you like to play?" << std::endl;
@@ -125,7 +124,6 @@ Board PlayerTurn(Board Game)
     
     while (stones > 0)
     {
-        std::cout << "Playing the turn..." << std::endl;
         stones--;
         Move++;
         if (Move > 5)
@@ -160,7 +158,7 @@ Board PlayerTurn(Board Game)
         {
             if (Game.PlayerOnePositions[Move] == 1)
             {
-                std::cout << "steal!\n\n";
+                Move = 5 - Move;
                 Game.PlayerOneScore += Game.PlayerTwoPositions[Move];
                 Game.PlayerTwoPositions[Move] = 0;
             }
@@ -169,6 +167,7 @@ Board PlayerTurn(Board Game)
         {
             if (Game.PlayerTwoPositions[Move] == 1)
             {
+                Move = 5 - Move;
                 Game.PlayerTwoScore = Game.PlayerTwoScore + Game.PlayerOnePositions[Move];
                 Game.PlayerOnePositions[Move] = 0;
             }
@@ -214,22 +213,234 @@ int CountStones(Board Game)
 
 void PrintBoard(Board Game)
 {
-    std::cout << "Player1 board: ";
-    for (int i = 0; i < 6; i++)
+    int Player1ScoreFiller = 5; //expands size of scoreboard if 2 digits long
+    int Player2ScoreFiller = 5;
+    if (Game.PlayerOneScore > 9)
     {
-        std::cout << Game.PlayerOnePositions[i] << " ";
+        Player1ScoreFiller++;
     }
-    std::cout << "--- " << Game.PlayerOneScore;
-    std::cout << std::endl;
-
-    std::cout << "Player2 board: ";
-    for (int i = 0; i < 6; i++)
-    {
-        std::cout << Game.PlayerTwoPositions[i] << " ";
-    }
-    std::cout << "--- " << Game.PlayerTwoScore;
-    std::cout << std::endl;
     
+    if (Game.PlayerTwoScore >9)
+    {
+        Player2ScoreFiller++;
+    }
+
+    for (int i = 0; i < Player2ScoreFiller; i++) //creates border of scoreboard on left
+    {
+        std::cout << "-";
+    }
+    // std::cout << " ";
+
+    for (size_t i = 0; i < 6; i++) // creates top horizontal board and top border for each game position for player 2
+    {
+        if (Game.PlayerOnePositions[i] > 9 )
+        {
+            std::cout << " ----";
+        }
+        else if (Game.PlayerTwoPositions[i] > 9)
+        {
+            std::cout << " ----";
+        }
+        else
+        {
+            std::cout << " ---";
+        }
+        
+    }
+    std::cout << " ";
+    for (int i = 0; i < Player1ScoreFiller; i++) // creates border of scoreboard on right
+    {
+        std::cout << "-";
+    }
+    std::cout << std::endl; //End of Line 1
+
+
+    std::cout << "|"; //creates line 2 border on left
+    if (Game.PlayerTwoScore > 9)
+    {
+        std::cout << "    |";
+    }
+    else
+    {
+        std::cout << "   |";
+    }
+
+    for (int i = 5; i > -1; i--) // adds game positions with the amount of stones for player 2
+    {
+        if (Game.PlayerOnePositions[i] > 9)
+        {
+            std::cout << "| " << Game.PlayerTwoPositions[i] << "  ";   
+        }
+        else
+        {
+        std::cout << "| " << Game.PlayerTwoPositions[i] << " ";
+        } 
+    }
+
+    std::cout << "||"; //creates line 2 border on right
+    if (Game.PlayerTwoScore > 9)
+    {
+        std::cout << "    |";
+    }
+    else
+    {
+        std::cout << "   |";
+    }
+
+    std::cout << std::endl; //end of line 2
+
+
+    std::cout << "|"; //creates line 3 border on left
+    if (Game.PlayerTwoScore > 9)
+    {
+        std::cout << "    |";
+    }
+    else
+    {
+        std::cout << "   |";
+    }
+
+    for (size_t i = 0; i < 6; i++) // creates bottom border for each game position for player 2
+    {
+        if (Game.PlayerOnePositions[i] > 9 || Game.PlayerTwoPositions[i] > 9)
+        {
+            std::cout << " ----";
+        }
+        else
+        {
+            std::cout << " ---";
+        }
+    }
+
+    std::cout << "||"; //creates line 3 border on right
+    if (Game.PlayerTwoScore > 9)
+    {
+        std::cout << "    |";
+    }
+    else
+    {
+        std::cout << "   |";
+    }
+
+    std::cout << std::endl; //end of line 3
+
+
+    std::cout << "| " << Game.PlayerTwoScore << " |"; // adds score to player 2
+
+    for (size_t i = 0; i < 6; i++) // creates middle space on board
+    {
+        if (Game.PlayerOnePositions[i] > 9 || Game.PlayerTwoPositions[i] > 9)
+        {
+            std::cout << "     ";
+        }
+        else
+        {
+            std::cout << "    ";
+        }
+    }
+    
+    std::cout << "|| " << Game.PlayerOneScore << " |"; //adds score to player 1
+
+    std::cout << std::endl; //end of line 4
+
+
+    std::cout << "|"; //creates line 5 border on left
+    if (Game.PlayerTwoScore > 9)
+    {
+        std::cout << "    |";
+    }
+    else
+    {
+        std::cout << "   |";
+    }    
+
+    for (size_t i = 0; i < 6; i++) // creates top  border for each game position for player 1
+    {
+        if (Game.PlayerOnePositions[i] > 9)
+        {
+            std::cout << " ----";
+        }
+        else if (Game.PlayerTwoPositions[i] > 9)
+        {
+            std::cout << " ----";
+        }
+        else
+        {
+            std::cout << " ---";
+        }
+    }
+    
+    std::cout << "||"; //creates line 5 border on right
+    if (Game.PlayerTwoScore > 9)
+    {
+        std::cout << "    |";
+    }
+    else
+    {
+        std::cout << "   |";
+    }
+
+    std::cout << std::endl; //end of line 5
+
+
+    std::cout << "|"; //creates line 6 border on left
+    if (Game.PlayerTwoScore > 9)
+    {
+        std::cout << "    |";
+    }
+    else
+    {
+        std::cout << "   |";
+    }
+
+    for (int i = 0; i < 6; i++) // adds game positions with the amount of stones for player 1
+    {
+        if (Game.PlayerTwoPositions[i] > 9)
+        {
+            std::cout << "| " << Game.PlayerOnePositions[i] << "  ";  
+        }
+        else
+        {
+        std::cout << "| " << Game.PlayerOnePositions[i] << " ";
+        }
+    }
+
+    std::cout << "||"; //creates line 6 border on right
+    if (Game.PlayerTwoScore > 9)
+    {
+        std::cout << "    |";
+    }
+    else
+    {
+        std::cout << "   |";
+    }
+
+    std::cout << std::endl; //end of line 6
+
+
+    for (int i = 0; i < Player2ScoreFiller; i++) //creates border of scoreboard on left
+    {
+        std::cout << "-";
+    }
+
+    for (size_t i = 0; i < 6; i++) // creates top horizontal board and top border for each game position for player 2
+    {
+        if (Game.PlayerOnePositions[i] > 9 || Game.PlayerTwoPositions[i] > 9)
+        {
+            std::cout << " ----";
+        }
+        else
+        {
+            std::cout << " ---";
+        }
+        
+    }
+    std::cout << " ";
+    for (int i = 0; i < Player1ScoreFiller; i++) // creates border of scoreboard on right
+    {
+        std::cout << "-";
+    }
+    std::cout << std::endl; //End of Line 7
 }
 
 void DeclareWinner(Board Game)
@@ -246,3 +457,31 @@ void DeclareWinner(Board Game)
         std::cout << "Player 2 wins!  Congratulations!" << std::endl; 
     }
 }
+// ----- ---- ---- ---- -----
+// |   || 10 | 10 | 10 || 
+// |   | ---- ---- ----
+// | 0 |
+// |   | ---- ---- ----
+// |   || 0  | 0  | 10 |
+// ----- ---- ---- ----
+
+
+// void PrintBoard(Board Game)
+// {
+//     std::cout << "Player1 board: ";
+//     for (int i = 0; i < 6; i++)
+//     {
+//         std::cout << Game.PlayerOnePositions[i] << " ";
+//     }
+//     std::cout << "--- " << Game.PlayerOneScore;
+//     std::cout << std::endl;
+
+//     std::cout << "Player2 board: ";
+//     for (int i = 0; i < 6; i++)
+//     {
+//         std::cout << Game.PlayerTwoPositions[i] << " ";
+//     }
+//     std::cout << "--- " << Game.PlayerTwoScore;
+//     std::cout << std::endl;
+    
+// }
