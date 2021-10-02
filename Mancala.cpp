@@ -3,7 +3,7 @@
 
 struct Board {
     int playerOneWins = 0;
-    int PlayerOnePositions[6] = {1,0,0,0,0,0};
+    int PlayerOnePositions[6] = {4,4,4,4,4,4};
     int PlayerOneScore = 0;
     int playerTwoWins = 0;
     int PlayerTwoPositions[6] = {4,4,4,4,4,4};
@@ -125,7 +125,6 @@ Board PlayerTurn(Board Game)
     
     while (stones > 0)
     {
-        std::cout << "Playing the turn..." << std::endl;
         stones--;
         Move++;
         if (Move > 5)
